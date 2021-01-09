@@ -83,45 +83,91 @@ namespace NewBlackjackCS
         }
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to C#");
             DisplayGreeting();
-            var suits = new List<string>() { "Spades", "Clubs", "Hearts", "Diamonds" };
-            var face = new List<string>() { "Ace of ", "2 of ", "3 of ", "4 of ", "5 of ", "6 of ", "7 of", "8 of ", "9 of ", "10 of " };
-            var DeckOfCards = new List<Card>();
-
-            foreach (var aCardValue in face)
+            var playAgain = "yes";
+            while (playAgain == "yes")
             {
-                foreach (var aCardSuit in suits)
+                var suits = new List<string>() { "Spades", "Clubs", "Hearts", "Diamonds" };
+                var face = new List<string>() { "Ace of ", "2 of ", "3 of ", "4 of ", "5 of ", "6 of ", "7 of", "8 of ", "9 of ", "10 of " };
+                var DeckOfCards = new List<Card>();
+
+                foreach (var aCardValue in face)
                 {
-                    var card = new Card()
+                    foreach (var aCardSuit in suits)
                     {
-                        Face = aCardValue,
-                        Suits = aCardSuit,
-                    };
-                    DeckOfCards.Add(card);
+                        var card = new Card()
+                        {
+                            Face = aCardValue,
+                            Suits = aCardSuit,
+                        };
+                        DeckOfCards.Add(card);
 
+                    }
                 }
+                var DeckSize = DeckOfCards.Count;
+                for (var endOfDeck = DeckSize - 1; endOfDeck >= 0; endOfDeck--)
+                {
+                    var cardPicker = new Random().Next(0, endOfDeck);
+                    var randomCard = DeckOfCards[cardPicker];
+                    var lastCard = DeckOfCards[endOfDeck];
+                    DeckOfCards[endOfDeck] = randomCard;
+                    DeckOfCards[cardPicker] = lastCard;
+                }
+
+                var computer = new Player();
+                var playerOne = new Player();
+
+                computer.PlayerHand = new List<Card>() { DeckOfCards[0], DeckOfCards[1] };
+                DeckOfCards.Remove(DeckOfCards[0]);
+                DeckOfCards.Remove(DeckOfCards[0]);
+
+                playerOne.PlayerHand = new List<Card>() { DeckOfCards[0], DeckOfCards[1] };
+                DeckOfCards.Remove(DeckOfCards[0]);
+                DeckOfCards.Remove(DeckOfCards[0]);
+
+                Console.WriteLine($"You have received a {playerOne.PlayerHand[0].Face + playerOne.PlayerHand[0].Suits} and {playerOne.PlayerHand[1].Face + playerOne.PlayerHand[1].Suits}");
+
+                for (var hitOrStand = ""; hitOrStand != "stand"; hitOrStand = Console.ReadLine())
+                {
+                    var i = 2;
+                    if (hitOrStand != "hit")
+                    {
+                        Console.WriteLine("Please enter either 'hit' or 'stand'");
+                    }
+                    else if (playerOne.PlayerHandValue() < 21)
+                    {
+                        playerOne.PlayerHand.Add(DeckOfCards[0]);
+                        DeckOfCards.Remove(DeckOfCards[0]);
+                        Console.WriteLine($"You have received a {playerOne.PlayerHand[i].Face + playerOne.PlayerHand[i].Suits}");
+                        i++;
+                    }
+                    else
+                    {
+                        Console.WriteLine("You busted fam, just enter 'stand'");
+                    }
+                }
+                while (computer.PlayerHandValue() < 17)
+                {
+                    computer.PlayerHand.Add(DeckOfCards[0]);
+                    DeckOfCards.Remove(DeckOfCards[0]);
+                }
+
+                if (computer.PlayerHandValue() > 21)
+                {
+                    Console.WriteLine("The dealer busted. You win!");
+                }
+
+                else if (computer.PlayerHandValue() >= playerOne.PlayerHandValue() && computer.PlayerHandValue() <= 21)
+                {
+                    Console.WriteLine("Dealer wins");
+                }
+                else if (computer.PlayerHandValue() < playerOne.PlayerHandValue() && playerOne.PlayerHandValue() <= 21)
+                {
+                    Console.WriteLine("Player wins");
+                }
+                Console.Write("Would you like to play again? ");
+                playAgain = Console.ReadLine();
             }
-            var DeckSize = DeckOfCards.Count;
-            for (var endOfDeck = DeckSize - 1; endOfDeck >= 0; endOfDeck--)
-            {
-                var cardPicker = new Random().Next(0, endOfDeck);
-                var randomCard = DeckOfCards[cardPicker];
-                var lastCard = DeckOfCards[endOfDeck];
-                DeckOfCards[endOfDeck] = randomCard;
-                DeckOfCards[cardPicker] = lastCard;
-            }
-
-            var computer = new Player();
-            var playerOne = new Player();
-
-            computer.PlayerHand = new List<Card>() { DeckOfCards[0], DeckOfCards[1] };
-            DeckOfCards.Remove(DeckOfCards[0]);
-            DeckOfCards.Remove(DeckOfCards[0]);
-
-            playerOne.PlayerHand = new List<Card>() { DeckOfCards[0], DeckOfCards[1] };
-            DeckOfCards.Remove(DeckOfCards[0]);
-            DeckOfCards.Remove(DeckOfCards[0]);
 
         }
     }
