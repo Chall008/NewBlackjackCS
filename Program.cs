@@ -88,7 +88,7 @@ namespace NewBlackjackCS
             while (playAgain == "yes")
             {
                 var suits = new List<string>() { "Spades", "Clubs", "Hearts", "Diamonds" };
-                var face = new List<string>() { "Ace of ", "2 of ", "3 of ", "4 of ", "5 of ", "6 of ", "7 of", "8 of ", "9 of ", "10 of " };
+                var face = new List<string>() { "Ace of ", "2 of ", "3 of ", "4 of ", "5 of ", "6 of ", "7 of ", "8 of ", "9 of ", "10 of " };
                 var DeckOfCards = new List<Card>();
 
                 foreach (var aCardValue in face)
@@ -126,6 +126,7 @@ namespace NewBlackjackCS
                 DeckOfCards.Remove(DeckOfCards[0]);
 
                 Console.WriteLine($"You have received a {playerOne.PlayerHand[0].Face + playerOne.PlayerHand[0].Suits} and {playerOne.PlayerHand[1].Face + playerOne.PlayerHand[1].Suits}");
+                Console.WriteLine($"You're at {playerOne.PlayerHandValue()}");
 
                 for (var hitOrStand = ""; hitOrStand != "stand"; hitOrStand = Console.ReadLine())
                 {
@@ -139,6 +140,7 @@ namespace NewBlackjackCS
                         playerOne.PlayerHand.Add(DeckOfCards[0]);
                         DeckOfCards.Remove(DeckOfCards[0]);
                         Console.WriteLine($"You have received a {playerOne.PlayerHand[i].Face + playerOne.PlayerHand[i].Suits}");
+                        Console.WriteLine($"You're at {playerOne.PlayerHandValue()}");
                         i++;
                     }
                     else
